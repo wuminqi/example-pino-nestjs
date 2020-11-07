@@ -5,6 +5,8 @@ import { AppService } from './app.service';
 
 import * as pino from 'pino';
 
+import { TypeOrmModule } from '@nestjs/typeorm';
+
 const logger = pino({
   level: process.env.NODE_ENV !== 'prod' ? 'debug' : 'info',
 },pino.destination({
@@ -18,7 +20,7 @@ setInterval(function() {
 
 @Module({
   imports: [
-    LoggerModule.forRoot({ // This doesn't work! D:
+    LoggerModule.forRoot({
       pinoHttp: {
         logger,
         autoLogging: true,
@@ -34,6 +36,16 @@ setInterval(function() {
           res: pino.stdSerializers.res,
         }
       },
+    }),
+    TypeOrmModule.forRoot({
+      type: 'mysql',
+      host: '111111111',
+      port: 3306,
+      username: 'whatever',
+      password: 'never',
+      database: 'mind',
+      entities: [],
+      synchronize: true,
     }),
   ],
   controllers: [AppController],
